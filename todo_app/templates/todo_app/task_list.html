@@ -1,0 +1,96 @@
+<!-- todo_app/templates/todo_app/task_list.html -->
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ToDo List</title>
+    <style>
+        body {
+            font-family: 'Arial', sans-serif;
+            margin: 20px;
+        }
+
+        h1, h2 {
+            color: #333;
+        }
+
+        ul {
+            list-style-type: none;
+            padding: 0;
+        }
+
+        li {
+            background-color: #f8f8f8;
+            padding: 10px;
+            margin: 5px 0;
+            border-radius: 5px;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .task-actions {
+            display: flex;
+        }
+
+        .task-actions button {
+            margin-left: 10px;
+            cursor: pointer;
+        }
+
+        form {
+            margin-top: 20px;
+        }
+
+        button {
+            padding: 10px;
+            background-color: #4caf50;
+            color: #fff;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+        }
+
+        button:hover {
+            background-color: #45a049;
+        }
+
+        /* Add your additional styling here */
+    </style>
+</head>
+<body>
+    <h1>Task List</h1>
+
+    <ul>
+        {% for task in tasks %}
+            <li>
+                <span>{{ task.title }} - {{ task.description }} - {{ task.due_date }} - {{ task.completed }}</span>
+                
+                <div class="task-actions">
+                    <form method="get" action="{% url 'show_task' %}">
+                        <button type="submit">Show</button>
+                    </form>
+
+                    <form method="get" action="{% url 'update_task' task.id %}">
+                        <button type="submit">Update</button>
+                    </form>
+
+                    <form method="post" action="{% url 'delete_task' task.id %}">
+                        {% csrf_token %}
+                        <button type="submit">Delete</button>
+                    </form>
+                </div>
+            </li>
+        {% endfor %}
+    </ul>
+
+    <h2>Add New Task</h2>
+    <form method="post" action=".">
+        {% csrf_token %}
+        {{ form.as_p }}
+        <button type="submit">Add Task</button>
+    </form>
+</body>
+</html>
